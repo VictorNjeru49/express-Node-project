@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Repository</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=person" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav>
+
+            <div class="left-side">
+                <img src="./LOGO.png" alt="Book Repository Logo" class="main-image">
+            </div>
+
+            <div class="middle-side">
+                <ul class="nav-links">
+                    <li><a href="">Home</a></li>
+                    <li><a href="genre">Books</a></li>
+                    <li><a href="collections">Collections</a></li>
+                    <li><a href="about">About</a></li>
+                    <li><a href="contact">Contact</a></li>
+                </ul>
+            </div>
+
+            <div class="right-side">
+                <ul class="nav-links">
+                    <li><a href="signin">Login</a></li>
+                    <li><a href="signup">Register</a></li>                    
+                    <li><a href="profile"><span class="material-symbols-outlined">
+                        person
+                        </span></a></li>
+
+                </ul>
+            </div>
+
+        </nav>
+    </header>
+</nav>
+<main>
+
+<form action="/login" method="POST" class="styled-form">
+    
+    <h3>Traditional Form</h3>
+    <div class="form-row">
+        <label for="name">Enter Name</label>
+        <input type="text" name="name" id="name" autocomplete="off" />
+    </div>
+    <button type="submit" class="block">Submit</button>
+    
+    <div class="result"></div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+    const result = document.querySelector('.result')
+    const fetchpeople = async ()=>{
+        try{
+            const { data }= await axios.get('/api/people')
+
+            const people = data.data.map((person)=>{
+                return `<h5>${person.name}</h5>`
+            })
+            result.innerHTML = people.join('')
+        }catch(error){
+            console.log(error)
+        }
+        
+    }
+    fetchpeople()
+    // submit form
+    const btn = document.querySelector('.submit-btn')
+    const input =document.querySelector('.form-input')
+    const formAlert= document.querySelector('.form-alert')
+    btn.addEventListener('click', async (e) => {
+    e.preventDefault()
+    const nameValue = input.value
+
+    try {
+    const { data } = await axios.post('/api/people', { name: nameValue })
+    const h5 = document.createElement('h5')
+    h5.textContent = data.person
+    result.appendChild(h5)
+    } catch (error) {
+// console.log(error.response)
+    formAlert.textContent = error.response.data.msg
+    }
+    input.value=''
+})
+</script>
+
+</main>
+</body>
+</html>
